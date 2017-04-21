@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 [ ![Download](https://api.bintray.com/packages/memorex386/Android_WebView_LocalWebServer/webview_local_server/images/download.svg) ](https://bintray.com/memorex386/Android_WebView_LocalWebServer/webview_local_server/_latestVersion)
 
 # Android WebView Local Web Server
@@ -38,6 +39,8 @@ a secure (`https:`) connection.
     }
 
 =======
+=======
+>>>>>>> origin/master
 # Android WebView Local Web Server
 
 Run the HTTP, HTTPS, and FILE protocols on your Android device to be viewed in a WebView
@@ -46,6 +49,9 @@ Run the HTTP, HTTPS, and FILE protocols on your Android device to be viewed in a
 ```groovy
 compile 'com.mtsdealersolutions:webview_local_server:1.0.2'
 ```
+<<<<<<< HEAD
+>>>>>>> origin/master
+=======
 >>>>>>> origin/master
 
 ## Implementation
@@ -108,7 +114,11 @@ compile 'com.mtsdealersolutions:webview_local_server:1.0.2'
                 .setUrlVirtualPath("testpath");
                 
 <<<<<<< HEAD
+<<<<<<< HEAD
 This will create a server that pulls assets from '__assetsFolder__/www' for the server "https://{RANDOM_UUID}.androidTest.com/testpath"
+=======
+This will create a server that pulls assets from "ASSETS_FOLDER/www" for the server "https://{RANDOM_UUID}.androidTest.com/testpath"
+>>>>>>> origin/master
 =======
 This will create a server that pulls assets from "ASSETS_FOLDER/www" for the server "https://{RANDOM_UUID}.androidTest.com/testpath"
 >>>>>>> origin/master
@@ -171,7 +181,11 @@ to use a fixed domain (like `androidplatform.net` or a domain you own).
 
       
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Based off of [Google's WebView-Local-Server](https://github.com/google/webview-local-server) 
+=======
+#Based off of [Google's WebView-Local-Server](https://github.com/google/webview-local-server) 
+>>>>>>> origin/master
 =======
 #Based off of [Google's WebView-Local-Server](https://github.com/google/webview-local-server) 
 >>>>>>> origin/master
