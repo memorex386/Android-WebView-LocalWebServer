@@ -4,11 +4,13 @@
 
 ## Overview
 
-Run the HTTP, HTTPS, and FILE protocols on your Android device to be viewed in a WebView.  You create a virtual webserver that runs on your android device, and when you navigate to the server url in the webview it will load it from local assets.  
+Create a local web server to run local html files into a webview and view them like a website.
+
+ You create a virtual web server that runs on your android device, and when you navigate to the server url in the webview it will load it from local assets.  Run HTTP, HTTPS, and FILE protocols on your Android device to be viewed in a WebView. 
 
 All other websites will load directly from the web.
 
-It is recommended that you store all website data under '__assetsFolder__/www/__webData__', although you can store it under the res folder as well
+It is recommended that you store all website data under '__assetsFolder__/www/__webData__', although you can store it under the res folder as well.  You can load the files anywhere in the assets folder still and just change the ```  .setPathInAndroidLocation("myfiles/secondaryfolder")``` to reference the specific folder (or ```  .setPathInAndroidLocation("")``` if you load the files directly into the assets folder.
 
 The purpose of this library is to enable hosting local content (such as assets
 or resources) under an http(s):// URL.  
