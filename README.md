@@ -44,7 +44,7 @@ a secure (`https:`) connection.
 
 #### Optional WebView...
 
-	<com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.LocalWebView
+	<com.mtsdealersolutions.webview_local_server.LocalWebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/local_web_view"/>
