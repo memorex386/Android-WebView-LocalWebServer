@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.third_party.android.java.com.google.webviewlocalserver.third_party.android;
+package com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.third_party.android;
 
 import android.net.Uri;
 
@@ -57,6 +57,7 @@ public class UriMatcher
      * @param path the path to match. * may be used as a wild card for
      * any text, and # may be used as a wild card for numbers.
      * @param code the code that is returned when a URI is matched
+     *             @param scheme the protocol to use, like HTTP or HTTPS
      * against the given components. Must be positive.
      */
     public void addURI(String scheme, String authority, String path, Object code)

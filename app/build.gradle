@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+
 
 android {
     compileSdkVersion 25
@@ -15,4 +17,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+publish {
+    repoName = "Android_WebView_LocalWebServer"
+    userOrg = 'memorex386'
+    groupId = 'com.mtsdealersolutions'
+    artifactId = 'webview_local_server'
+    publishVersion = '1.0.2'
+    desc = 'Run the HTTP, HTTPS, and FILE protocols on your Android device to be viewed in a WebView'
+    website = 'https://github.com/memorex386/Android_WebView_LocalWebServer'
 }

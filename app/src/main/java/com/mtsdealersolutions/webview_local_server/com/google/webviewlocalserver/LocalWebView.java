@@ -1,4 +1,4 @@
-package com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.third_party;
+package com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -92,6 +92,7 @@ public class LocalWebView extends WebView {
             return super.shouldOverrideUrlLoading(view, url);
         }
 
+        @TargetApi(24)
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             if (mWebViewClient != null) {
@@ -128,6 +129,7 @@ public class LocalWebView extends WebView {
             super.onLoadResource(view, url);
         }
 
+        @TargetApi(23)
         @Override
         public void onPageCommitVisible(WebView view, String url) {
             if (mWebViewClient != null) {
@@ -167,6 +169,7 @@ public class LocalWebView extends WebView {
             super.onReceivedError(view, errorCode, description, failingUrl);
         }
 
+        @TargetApi(23)
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             if (mWebViewClient != null) {
@@ -177,6 +180,7 @@ public class LocalWebView extends WebView {
             super.onReceivedError(view, request, error);
         }
 
+        @TargetApi(23)
         @Override
         public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
             if (mWebViewClient != null) {
@@ -217,6 +221,7 @@ public class LocalWebView extends WebView {
             super.onReceivedSslError(view, handler, error);
         }
 
+        @TargetApi(21)
         @Override
         public void onReceivedClientCertRequest(WebView view, ClientCertRequest request) {
             if (mWebViewClient != null) {
@@ -266,6 +271,7 @@ public class LocalWebView extends WebView {
             super.onScaleChanged(view, oldScale, newScale);
         }
 
+        @TargetApi(12)
         @Override
         public void onReceivedLoginRequest(WebView view, String realm, String account, String args) {
             if (mWebViewClient != null) {
