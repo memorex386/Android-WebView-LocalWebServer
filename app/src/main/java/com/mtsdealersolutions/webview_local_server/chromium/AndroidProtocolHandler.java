@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.third_party.chromium;
+package com.mtsdealersolutions.webview_local_server.chromium;
 
 import android.content.Context;
 import android.content.res.AssetManager;

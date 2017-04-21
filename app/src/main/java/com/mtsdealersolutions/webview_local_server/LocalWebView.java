@@ -1,4 +1,4 @@
-package com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver;
+package com.mtsdealersolutions.webview_local_server;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -16,8 +16,6 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.WebViewLocalServer;
 
 /**
  * Created by bradley.thome on 4/20/17.
@@ -67,6 +65,7 @@ public class LocalWebView extends WebView {
         super.setWebViewClient(new CustomWebViewClient());
 
         mWebViewLocalServer = new WebViewLocalServer(getContext());
+
     }
 
     public WebViewLocalServer getWebViewLocalServer() {

@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-package com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver;
+package com.mtsdealersolutions.webview_local_server;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -24,8 +24,8 @@ import android.util.Log;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 
-import com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.third_party.android.UriMatcher;
-import com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.third_party.chromium.AndroidProtocolHandler;
+import com.mtsdealersolutions.webview_local_server.android.UriMatcher;
+import com.mtsdealersolutions.webview_local_server.chromium.AndroidProtocolHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,7 +71,6 @@ public class WebViewLocalServer {
 
     private final UriMatcher uriMatcher;
     private final AndroidProtocolHandler protocolHandler;
-    private final String authority;
 
     /**
      * A handler that produces responses for paths on the virtual asset server.
@@ -166,7 +165,6 @@ public class WebViewLocalServer {
     /*package*/ WebViewLocalServer(AndroidProtocolHandler protocolHandler) {
         uriMatcher = new UriMatcher(null);
         this.protocolHandler = protocolHandler;
-        authority = UUID.randomUUID().toString() + "." + DEFAULT_DOMAIN;
     }
 
     /**
@@ -264,9 +262,7 @@ public class WebViewLocalServer {
      */
     void register(Uri uri, PathHandler handler) {
         synchronized (uriMatcher) {
-            for (UrlProtocol urlProtocol : UrlProtocol.values()) {
-                uriMatcher.addURI(urlProtocol.getProtocol(), uri.getAuthority(), uri.getPath(), handler);
-            }
+            uriMatcher.addURI(uri.getScheme(), uri.getAuthority(), uri.getPath(), handler);
         }
     }
 
@@ -306,9 +302,13 @@ public class WebViewLocalServer {
         if (builder == null)
             throw new IllegalArgumentException("assets Builder cannot be null");
 
+        String domain = builder.getDomain();
+        if (!TextUtils.isEmpty(builder.getSubDomain()))
+            domain = builder.getSubDomain() + "." + domain;
+
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme(UrlProtocol.HTTPS.getProtocol());
-        uriBuilder.authority(builder.getDomain());
+        uriBuilder.authority(domain);
         uriBuilder.path(builder.getUrlVirtualPath());
 
         if (builder instanceof AssetsBuilder && ((AssetsBuilder) builder).getPathInAndroidLocation().indexOf('*') != -1) {
@@ -326,7 +326,15 @@ public class WebViewLocalServer {
 
                 try {
                     if (builder instanceof AssetsBuilder) {
-                        String path = url.getPath().replaceFirst(builder.getUrlVirtualPath(), ((AssetsBuilder) builder).getPathInAndroidLocation());
+
+                        String path = url.getPath();
+                        if (path.startsWith("/")) path = path.replaceFirst("/", "");
+
+                        if (path.startsWith(builder.getUrlVirtualPath()))
+                            path = path.replaceFirst(builder.getUrlVirtualPath(), "");
+
+                        path = ((AssetsBuilder) builder).getPathInAndroidLocation() + (path.startsWith("/") ? "" : "/") + path;
+
                         stream = protocolHandler.openAsset(path);
                     } else {
                         stream = protocolHandler.openResource(url);
@@ -334,8 +342,7 @@ public class WebViewLocalServer {
 
                 } catch (IOException e) {
                     Log.e(TAG, "Unable to open asset URL: " + url);
-                    throw new RuntimeException(e);
-                    //   return null;
+                    return null;
                 }
 
 
@@ -343,7 +350,10 @@ public class WebViewLocalServer {
             }
         };
 
-        register(Uri.withAppendedPath(uriBuilder.build(), "**"), handler);
+        for (Map.Entry<UrlProtocol, Boolean> mapEntry : builder.mIsAllowed.entrySet()) {
+            if (mapEntry.getValue())
+                register(Uri.withAppendedPath(uriBuilder.scheme(mapEntry.getKey().getProtocol()).build(), "**"), handler);
+        }
 
         return new Server(uriBuilder);
     }
@@ -461,8 +471,8 @@ public class WebViewLocalServer {
      * Hosts the application's assets on an http(s):// URL. Assets from the local path
      * <code>assetPath/...</code> will be available under
      * <code>http(s)://{domain}/{virtualAssetPath}/...</code>.
-     *
-     *  prefixes under which the assets are hosted.
+     * <p>
+     * prefixes under which the assets are hosted.
      */
     public static class AssetsBuilder extends ResBuilder {
 
@@ -474,8 +484,8 @@ public class WebViewLocalServer {
          * Hosts the application's assets on an http(s):// URL. Assets from the local path
          * <code>assetPath/...</code> will be available under
          * <code>http(s)://{domain}/{virtualAssetPath}/...</code>.
-         *
-         *  prefixes under which the assets are hosted.
+         * <p>
+         * prefixes under which the assets are hosted.
          */
         public AssetsBuilder() {
             super();
@@ -490,6 +500,14 @@ public class WebViewLocalServer {
          * @return prefixes under which the assets are hosted.
          */
         public AssetsBuilder setPathInAndroidLocation(String pathInAndroidLocation) {
+            if (!TextUtils.isEmpty(pathInAndroidLocation))
+                while (pathInAndroidLocation.startsWith("/")) {
+                    pathInAndroidLocation = pathInAndroidLocation.substring(1, pathInAndroidLocation.length());
+                }
+            if (!TextUtils.isEmpty(pathInAndroidLocation))
+                while (pathInAndroidLocation.endsWith("/")) {
+                    pathInAndroidLocation = pathInAndroidLocation.substring(0, pathInAndroidLocation.length() - 1);
+                }
             mPathInAndroidLocation = pathInAndroidLocation;
             return this;
         }
@@ -537,13 +555,19 @@ public class WebViewLocalServer {
         public AssetsBuilder setRandomSubDomain() {
             return (AssetsBuilder) super.setRandomSubDomain();
         }
+
+        @Override
+        public AssetsBuilder clearSubDomain() {
+            return (AssetsBuilder) super.clearSubDomain();
+        }
+
     }
 
     /**
      * Hosts the application's assets on an http(s):// URL. Assets from the local path
      * <code>assetPath/...</code> will be available under
      * <code>http(s)://{domain}/{virtualAssetPath}/...</code>.
-     *
+     * <p>
      * return prefixes under which the assets are hosted.
      */
     public static class ResBuilder {
@@ -556,7 +580,7 @@ public class WebViewLocalServer {
          * Hosts the application's assets on an http(s):// URL. Assets from the local path
          * <code>assetPath/...</code> will be available under
          * <code>http(s)://{domain}/{virtualAssetPath}/...</code>.
-         *
+         * <p>
          * return prefixes under which the assets are hosted.
          */
         public ResBuilder() {
@@ -576,6 +600,12 @@ public class WebViewLocalServer {
          * @return prefixes under which the assets are hosted.
          */
         public ResBuilder setDomain(String domain) {
+            if (!TextUtils.isEmpty(domain)) while (domain.startsWith("/")) {
+                domain = domain.substring(1, domain.length());
+            }
+            if (!TextUtils.isEmpty(domain)) while (domain.endsWith("/")) {
+                domain = domain.substring(0, domain.length() - 1);
+            }
             mDomain = domain;
             return this;
         }
@@ -589,6 +619,12 @@ public class WebViewLocalServer {
          * @return prefixes under which the assets are hosted.
          */
         public ResBuilder setUrlVirtualPath(String urlVirtualPath) {
+            if (!TextUtils.isEmpty(urlVirtualPath)) while (urlVirtualPath.startsWith("/")) {
+                urlVirtualPath = urlVirtualPath.substring(1, urlVirtualPath.length());
+            }
+            if (!TextUtils.isEmpty(urlVirtualPath)) while (urlVirtualPath.endsWith("/")) {
+                urlVirtualPath = urlVirtualPath.substring(0, urlVirtualPath.length() - 1);
+            }
             mUrlVirtualPath = urlVirtualPath;
             return this;
         }
@@ -598,6 +634,7 @@ public class WebViewLocalServer {
         }
 
         public String getUrlVirtualPath() {
+            if (TextUtils.isEmpty(mUrlVirtualPath)) return "";
             return TextUtils.isEmpty(mUrlVirtualPath) ? "" : mUrlVirtualPath;
         }
 
@@ -633,12 +670,22 @@ public class WebViewLocalServer {
         }
 
         /**
-         * create a random subDomain on which the assets should be hosted, great for increased security (for example "{RANDOM-UUID}.example.com").
+         * create a random subDomain on which the assets should be hosted, great for increased security (for example "{RANDOM-UUID-SUBDOMAIN}.example.com").
          *
          * @return this builder
          */
         public ResBuilder setRandomSubDomain() {
             mSubDomain = UUID.randomUUID().toString();
+            return this;
+        }
+
+        /**
+         * clear the subdomain, by default the subdomain is "{RANDOM-UUID-SUBDOMAIN}.example.com"
+         *
+         * @return this builder
+         */
+        public ResBuilder clearSubDomain() {
+            mSubDomain = null;
             return this;
         }
     }

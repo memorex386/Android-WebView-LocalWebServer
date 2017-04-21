@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.third_party.android;
+package com.mtsdealersolutions.webview_local_server.android;
 
 import android.net.Uri;
 

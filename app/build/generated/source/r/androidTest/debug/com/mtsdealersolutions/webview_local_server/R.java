@@ -7,4 +7,10 @@
 package com.mtsdealersolutions.webview_local_server;
 
 public final class R {
+    public static final class id {
+        public static final int web_view = 0x7f030000;
+    }
+    public static final class layout {
+        public static final int sdfsf = 0x7f020000;
+    }
 }
