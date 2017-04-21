@@ -12,6 +12,7 @@ All other websites will load directly from the web.
 
 It is recommended that you store all website data under '__assetsFolder__/www/__webData__', although you can store it under the res folder as well.  You can load the files anywhere in the assets folder still and just change the ```  .setPathInAndroidLocation("myfiles/secondaryfolder")``` to reference the specific folder (or ```  .setPathInAndroidLocation("")``` if you load the files directly into the assets folder.
 
+###Why?
 The purpose of this library is to enable hosting local content (such as assets
 or resources) under an http(s):// URL.  
 The traditional way to access local resources is to use `file:///android_asset`
