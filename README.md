@@ -35,7 +35,7 @@ a secure (`https:`) connection.
     dependencies
     {
     ...
-    compile 'com.mtsdealersolutions:webview_local_server:1.0.3'
+    compile 'com.mtsdealersolutions:webview_local_server:1.0.4'
     ...
     }
 
@@ -49,7 +49,7 @@ a secure (`https:`) connection.
         android:layout_height="match_parent"
         android:id="@+id/local_web_view"/>
 
-#
+####
         
     LocalWebView localwebview = (LocalWebView)findViewById(R.id.local_web_view);
     mWebViewLocalServer = webview.getWebViewLocalServer();
@@ -73,7 +73,7 @@ a secure (`https:`) connection.
             }
         }
         
-#
+####
 
      webView.setWebViewClient(new MyWebViewClient);
      
