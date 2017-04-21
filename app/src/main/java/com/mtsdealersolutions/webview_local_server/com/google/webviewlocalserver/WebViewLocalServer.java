@@ -24,8 +24,8 @@ import android.util.Log;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 
-import com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.third_party.android.java.com.google.webviewlocalserver.third_party.android.UriMatcher;
-import com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.third_party.chromium.java.com.google.webviewlocalserver.third_party.chromium.AndroidProtocolHandler;
+import com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.third_party.android.UriMatcher;
+import com.mtsdealersolutions.webview_local_server.com.google.webviewlocalserver.third_party.chromium.AndroidProtocolHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +49,7 @@ import java.util.UUID;
  *     // For security WebViewLocalServer uses a unique subdomain by default.
  *     AssetHostingDetails ahd = localServer.hostAssets("/www");
  *     webView.setWebViewClient(new WebViewClient() {
- *         @Override
+ *         Override
  *         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
  *             return localServer.shouldInterceptRequest(request);
  *         }
@@ -109,6 +109,7 @@ public class WebViewLocalServer {
             this.responseHeaders = responseHeaders;
         }
 
+        @TargetApi(21)
         public InputStream handle(WebResourceRequest request) {
             return handle(request.getUrl());
         }
@@ -448,6 +449,8 @@ public class WebViewLocalServer {
 
         /**
          * The URL Protocol that can be used for hosting
+         *
+         * @return protocol string
          */
         public String getProtocol() {
             return mProtocol;
@@ -459,7 +462,7 @@ public class WebViewLocalServer {
      * <code>assetPath/...</code> will be available under
      * <code>http(s)://{domain}/{virtualAssetPath}/...</code>.
      *
-     * @return prefixes under which the assets are hosted.
+     *  prefixes under which the assets are hosted.
      */
     public static class AssetsBuilder extends ResBuilder {
 
@@ -472,7 +475,7 @@ public class WebViewLocalServer {
          * <code>assetPath/...</code> will be available under
          * <code>http(s)://{domain}/{virtualAssetPath}/...</code>.
          *
-         * @return prefixes under which the assets are hosted.
+         *  prefixes under which the assets are hosted.
          */
         public AssetsBuilder() {
             super();
@@ -541,7 +544,7 @@ public class WebViewLocalServer {
      * <code>assetPath/...</code> will be available under
      * <code>http(s)://{domain}/{virtualAssetPath}/...</code>.
      *
-     * @return prefixes under which the assets are hosted.
+     * return prefixes under which the assets are hosted.
      */
     public static class ResBuilder {
         private String mDomain = DEFAULT_DOMAIN;
@@ -554,7 +557,7 @@ public class WebViewLocalServer {
          * <code>assetPath/...</code> will be available under
          * <code>http(s)://{domain}/{virtualAssetPath}/...</code>.
          *
-         * @return prefixes under which the assets are hosted.
+         * return prefixes under which the assets are hosted.
          */
         public ResBuilder() {
             mIsAllowed = new HashMap<>();
@@ -631,6 +634,8 @@ public class WebViewLocalServer {
 
         /**
          * create a random subDomain on which the assets should be hosted, great for increased security (for example "{RANDOM-UUID}.example.com").
+         *
+         * @return this builder
          */
         public ResBuilder setRandomSubDomain() {
             mSubDomain = UUID.randomUUID().toString();
