@@ -51,8 +51,8 @@ a secure (`https:`) connection.
 
 ####
         
-    LocalWebView localwebview = (LocalWebView)findViewById(R.id.local_web_view);
-    mWebViewLocalServer = webview.getWebViewLocalServer();
+    mLocalWebView = (LocalWebView)findViewById(R.id.local_web_view);
+    mWebViewLocalServer = mLocalWebView.getWebViewLocalServer();
     
 #### ...Or Just Implement WebViewLocalServer
 
@@ -75,7 +75,7 @@ a secure (`https:`) connection.
         
 ####
 
-     webView.setWebViewClient(new MyWebViewClient);
+     mLocalWebView.setWebViewClient(new MyWebViewClient);
      
 ## Usage
 
@@ -104,28 +104,28 @@ This will create a server that pulls assets from '__assetsFolder__/www' for the 
 #### 2. Now implement it
 
     //Get the server instance
-     WebViewLocalServer.Server server = webViewLocalServer.createHostFromAssets(assetsBuilder);
+     WebViewLocalServer.Server server = mWebViewLocalServer.createHostFromAssets(assetsBuilder);
      
      //Get the uri for the server path, in this example this now is "https://{RANDOM_UUID}.androidTest.com/testpath/index.html"
      Uri uri = server.getServerUri(WebViewLocalServer.UrlProtocol.HTTPS, "index.html");
 
     //Convert to string and load into webview
-     webview.loadUrl(uri.toString());
+     mLocalWebView.loadUrl(uri.toString());
 
 
 #### 3. Consider using the following settings in order to maximize security:
 
-        webView.getSettings().setAllowFileAccessFromFileURLs(false);
-        webView.getSettings().setAllowUniversalAccessFromFileURLs(false);
+        mLocalWebView.getSettings().setAllowFileAccessFromFileURLs(false);
+        mLocalWebView.getSettings().setAllowUniversalAccessFromFileURLs(false);
 
         // Keeping these off is less critical but still a good idea, especially
         // if your app is not using file:// or content:// URLs.
-        webView.getSettings().setAllowFileAccess(false);
-        webView.getSettings().setAllowContentAccess(false);
+        mLocalWebView.getSettings().setAllowFileAccess(false);
+        mLocalWebView.getSettings().setAllowContentAccess(false);
         
 ## LocalWebView
 
-LocalWebView automatically implements the WebViewLocalServer, so use ```localwebview.getWebViewLocalServer();``` method to retrieve it.
+LocalWebView automatically implements the WebViewLocalServer, so use ```mLocalWebView.getWebViewLocalServer();``` method to retrieve it.
 
 LocalWebView also sets these webview settings by default...
 
