@@ -90,7 +90,8 @@ a secure (`https:`) connection.
                 // www is the default path, ie 'ASSETS_FOLDER/www'"
                 .setPathInAndroidLocation("www")
                 
-                // generate a random subdomain, this is the default.  You can also clear the subdomain by setSubDomain("")"      
+                // generate a random subdomain, this is the default.  You can also clear the subdomain by setSubDomain("") or clearSubDomain()"
+                // NOTE : Remember that a random subdomain means that cookies and history will be lost on activity/app restart
                 .setRandomSubDomain()
                 
                 // HTTP, HTTPS, and FILE are enabled by default
@@ -138,7 +139,7 @@ LocalWebView also sets these webview settings by default...
     getSettings().setBuiltInZoomControls(false);
     getSettings().setSupportZoom(false);
     
-... you can still modify these settings from ```localwebview.getSettings()```
+... you can still modify these settings from ```mLocalwebview.getSettings()```
 
 ## Picking a domain.
 
@@ -153,6 +154,8 @@ By default the `WebViewLocalServer` will attempt to host assets/resources on
 a random subdomain of `androidplatform.net` (something like
 `123e4567-e89b-12d3-a456-426655440000.androidplatform.net`). This random
 subdomain is chosen once per `WebViewLocalServer`.
+
+Remember that a random domain means that cookies and history will not be saved for the webview on activity/app restart.
 
 Should using a random subdomain be inconvenient for some reason it is possible
 to use a fixed domain (like `androidplatform.net` or a domain you own).
