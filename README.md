@@ -97,7 +97,11 @@ a secure (`https:`) connection.
                 // HTTP, HTTPS, and FILE are enabled by default
                 .setProtocol(WebViewLocalServer.UrlProtocol.HTTP, false)
                 
+                
                 // no Url virtual path is set by default
+                // 
+                // NOTE : Remember, if you define a virtual path AND your website uses <base href>,
+                // then you need to adjust <base href> to match whatever is here (example <base href="/testpath/">
                 .setUrlVirtualPath("testpath");
                 
 This will create a server that pulls assets from '__assetsFolder__/www' for the server "https://{RANDOM_UUID}.androidTest.com/testpath"
