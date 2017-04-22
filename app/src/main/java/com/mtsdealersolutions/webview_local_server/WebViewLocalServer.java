@@ -364,7 +364,7 @@ public class WebViewLocalServer {
             }
         };
 
-        for (Map.Entry<UrlProtocol, Boolean> mapEntry : builder.mIsAllowed.entrySet()) {
+        for (Map.Entry<UrlProtocol, Boolean> mapEntry : builder.getIsAllowed().entrySet()) {
             if (mapEntry.getValue())
                 register(Uri.withAppendedPath(uriBuilder.scheme(mapEntry.getKey().getProtocol()).build(), "**"), handler);
         }
@@ -582,6 +582,7 @@ public class WebViewLocalServer {
 
     }
 
+
     /**
      * Hosts the application's assets on an http(s):// URL. Assets from the local path
      * <code>assetPath/...</code> will be available under
@@ -589,7 +590,71 @@ public class WebViewLocalServer {
      * <p>
      * return prefixes under which the assets are hosted.
      */
-    public static class ResBuilder {
+    public static class ResBuilder extends Builder {
+        public ResBuilder() {
+            super();
+        }
+
+        @Override
+        public ResBuilder setDomain(String domain) {
+            return (ResBuilder) super.setDomain(domain);
+        }
+
+        @Override
+        public ResBuilder setUrlVirtualPath(String urlVirtualPath) {
+            return (ResBuilder) super.setUrlVirtualPath(urlVirtualPath);
+        }
+
+        @Override
+        public String getDomain() {
+            return super.getDomain();
+        }
+
+        @Override
+        public String getUrlVirtualPath() {
+            return super.getUrlVirtualPath();
+        }
+
+        @Override
+        public String getSubDomain() {
+            return super.getSubDomain();
+        }
+
+        @Override
+        public ResBuilder clearDomain() {
+            return (ResBuilder) super.clearDomain();
+        }
+
+        @Override
+        public ResBuilder setProtocol(UrlProtocol urlProtocol, boolean isAllowed) {
+            return (ResBuilder) super.setProtocol(urlProtocol, isAllowed);
+        }
+
+        @Override
+        public ResBuilder setSubDomain(String subDomain) {
+            return (ResBuilder) super.setSubDomain(subDomain);
+        }
+
+        @Override
+        public ResBuilder setRandomSubDomain() {
+            return (ResBuilder) super.setRandomSubDomain();
+        }
+
+        @Override
+        public ResBuilder clearSubDomain() {
+            return (ResBuilder) super.clearSubDomain();
+        }
+    }
+
+
+    /**
+     * Hosts the application's assets on an http(s):// URL. Assets from the local path
+     * <code>assetPath/...</code> will be available under
+     * <code>http(s)://{domain}/{virtualAssetPath}/...</code>.
+     * <p>
+     * return prefixes under which the assets are hosted.
+     */
+    public static class Builder {
         private String mDomain = DEFAULT_DOMAIN;
         private String mSubDomain;
         private String mUrlVirtualPath = "";
@@ -602,7 +667,7 @@ public class WebViewLocalServer {
          * <p>
          * return prefixes under which the assets are hosted.
          */
-        public ResBuilder() {
+        private Builder() {
             mIsAllowed = new HashMap<>();
             for (UrlProtocol urlProtocol : UrlProtocol.values()) {
                 mIsAllowed.put(urlProtocol, true);
@@ -618,7 +683,7 @@ public class WebViewLocalServer {
          * @param domain custom domain on which the assets should be hosted (for example "example.com").
          * @return prefixes under which the assets are hosted.
          */
-        public ResBuilder setDomain(String domain) {
+        public Builder setDomain(String domain) {
             if (!TextUtils.isEmpty(domain)) while (domain.startsWith("/")) {
                 domain = domain.substring(1, domain.length());
             }
@@ -637,7 +702,7 @@ public class WebViewLocalServer {
          * @param urlVirtualPath the path on the local server under which the assets should be hosted.
          * @return prefixes under which the assets are hosted.
          */
-        public ResBuilder setUrlVirtualPath(String urlVirtualPath) {
+        public Builder setUrlVirtualPath(String urlVirtualPath) {
             if (!TextUtils.isEmpty(urlVirtualPath)) while (urlVirtualPath.startsWith("/")) {
                 urlVirtualPath = urlVirtualPath.substring(1, urlVirtualPath.length());
             }
@@ -666,7 +731,7 @@ public class WebViewLocalServer {
          *
          * @return this builder
          */
-        public ResBuilder clearDomain() {
+        public Builder clearDomain() {
             mDomain = "**NONE";
             return this;
         }
@@ -680,7 +745,7 @@ public class WebViewLocalServer {
          * @param isAllowed   whether it is allowed or not
          * @return prefixes under which the assets are hosted.
          */
-        public ResBuilder setProtocol(UrlProtocol urlProtocol, boolean isAllowed) {
+        public Builder setProtocol(UrlProtocol urlProtocol, boolean isAllowed) {
             mIsAllowed.put(urlProtocol, isAllowed);
             return this;
         }
@@ -693,7 +758,7 @@ public class WebViewLocalServer {
          * @param subDomain custom subDomain on which the assets should be hosted (for example "{CUSTOM}.example.com").
          * @return prefixes under which the assets are hosted.
          */
-        public ResBuilder setSubDomain(String subDomain) {
+        public Builder setSubDomain(String subDomain) {
             mSubDomain = subDomain;
             return this;
         }
@@ -703,7 +768,7 @@ public class WebViewLocalServer {
          *
          * @return this builder
          */
-        public ResBuilder setRandomSubDomain() {
+        public Builder setRandomSubDomain() {
             mSubDomain = UUID.randomUUID().toString();
             return this;
         }
@@ -713,9 +778,13 @@ public class WebViewLocalServer {
          *
          * @return this builder
          */
-        public ResBuilder clearSubDomain() {
+        public Builder clearSubDomain() {
             mSubDomain = null;
             return this;
+        }
+
+        public Map<UrlProtocol, Boolean> getIsAllowed() {
+            return mIsAllowed;
         }
     }
 }
