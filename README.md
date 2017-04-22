@@ -142,6 +142,14 @@ LocalWebView also sets these webview settings by default...
     getSettings().setBuiltInZoomControls(false);
     getSettings().setSupportZoom(false);
     
+####
+
+... and if you load the FILE protocol url then these are forced to true...
+
+    getSettings().setAllowFileAccessFromFileURLs(true);
+    getSettings().setAllowUniversalAccessFromFileURLs(true);
+
+    
 ... you can still modify these settings from ```mLocalwebview.getSettings()```
 
 ## Picking a domain.
