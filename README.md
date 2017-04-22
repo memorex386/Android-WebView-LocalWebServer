@@ -39,8 +39,27 @@ a secure (`https:`) connection.
     ...
     }
 
+## Quick Implementation
 
-## Implementation
+Quick implementation will get you up and running!
+        
+    LocalWebView localWebView = (LocalWebView)findViewById(R.id.local_web_view);
+    
+    WebViewLocalServer webViewLocalServer = localWebView.getWebViewLocalServer();
+    
+    WebViewLocalServer.AssetsBuilder assetsBuilder = new WebViewLocalServer.AssetsBuilder();
+    
+    WebViewLocalServer.Server server = webViewLocalServer.createHostFromAssets(assetsBuilder);
+    
+    Uri uri = server.getServerUri(WebViewLocalServer.UrlProtocol.HTTPS, "index.html");
+
+    localWebView.loadUrl(uri.toString());  
+        
+####
+
+This will get '__{ASSETS_FOLDER}__/www/index.html' and host it it as 'https://{RANDOM_UUID}.androidPlatform.net/index.html'.
+
+## Recommended Implementation
 
 #### Optional WebView...
 
