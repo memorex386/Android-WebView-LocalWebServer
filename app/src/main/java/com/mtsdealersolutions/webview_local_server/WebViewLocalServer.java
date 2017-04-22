@@ -158,8 +158,22 @@ public class WebViewLocalServer {
          * @return the http: scheme prefix at which assets are hosted. Can return null.
          */
         public Uri getServerUri(UrlProtocol protocol, String appendToPath) {
-            return mBuilder.scheme(protocol.getProtocol()).appendPath(appendToPath).build();
+            Uri.Builder builder = mBuilder.scheme(protocol.getProtocol());
+            if (!TextUtils.isEmpty(appendToPath)) mBuilder.appendPath(appendToPath);
+            return mBuilder.build();
         }
+
+
+        /**
+         * Gets the http: scheme prefix at which assets are hosted.
+         *
+         * @param protocol the protocol to use for this Uri
+         * @return the http: scheme prefix at which assets are hosted. Can return null.
+         */
+        public Uri getServerUri(UrlProtocol protocol) {
+            return getServerUri(protocol, null);
+        }
+
     }
 
     /*package*/ WebViewLocalServer(AndroidProtocolHandler protocolHandler) {
