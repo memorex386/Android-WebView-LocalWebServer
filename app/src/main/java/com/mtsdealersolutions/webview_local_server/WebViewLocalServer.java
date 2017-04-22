@@ -532,6 +532,11 @@ public class WebViewLocalServer {
         }
 
         @Override
+        public AssetsBuilder clearDomain() {
+            return (AssetsBuilder) super.clearDomain();
+        }
+
+        @Override
         public String getUrlVirtualPath() {
             return super.getUrlVirtualPath();
         }
@@ -630,7 +635,7 @@ public class WebViewLocalServer {
         }
 
         public String getDomain() {
-            return TextUtils.isEmpty(mDomain) ? DEFAULT_DOMAIN : mDomain;
+            return TextUtils.isEmpty(mDomain) ? DEFAULT_DOMAIN : mDomain.equals("**NONE") ? "" : mDomain;
         }
 
         public String getUrlVirtualPath() {
@@ -640,6 +645,16 @@ public class WebViewLocalServer {
 
         public String getSubDomain() {
             return mSubDomain;
+        }
+
+        /**
+         * clear the domain.  This is useful particularity for FILE protocol, (example file:///android_asset/www)
+         *
+         * @return this builder
+         */
+        public ResBuilder clearDomain() {
+            mDomain = "**NONE";
+            return this;
         }
 
         /**

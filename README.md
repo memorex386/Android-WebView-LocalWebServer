@@ -35,7 +35,7 @@ a secure (`https:`) connection.
     dependencies
     {
     ...
-    compile 'com.mtsdealersolutions:webview_local_server:1.0.4'
+    compile 'com.mtsdealersolutions:webview_local_server:1.0.9'
     ...
     }
 
@@ -107,7 +107,8 @@ This will create a server that pulls assets from '__assetsFolder__/www' for the 
     //Get the server instance
      WebViewLocalServer.Server server = mWebViewLocalServer.createHostFromAssets(assetsBuilder);
      
-     //Get the uri for the server path, in this example this now is "https://{RANDOM_UUID}.androidTest.com/testpath/index.html"
+     // Get the uri for the server path, in this example this now is 
+     // "https://{RANDOM_UUID}.androidTest.com/testpath/index.html"
      Uri uri = server.getServerUri(WebViewLocalServer.UrlProtocol.HTTPS, "index.html");
 
     //Convert to string and load into webview
@@ -116,6 +117,8 @@ This will create a server that pulls assets from '__assetsFolder__/www' for the 
 
 #### 3. Consider using the following settings in order to maximize security:
 
+        // Set these to false for HTTP and HTTPS is recommended, but true 
+        // is required for FILE protocol
         mLocalWebView.getSettings().setAllowFileAccessFromFileURLs(false);
         mLocalWebView.getSettings().setAllowUniversalAccessFromFileURLs(false);
 

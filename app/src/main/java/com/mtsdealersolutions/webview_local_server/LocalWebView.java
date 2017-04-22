@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.webkit.ClientCertRequest;
@@ -16,6 +17,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import java.util.Map;
 
 /**
  * Created by bradley.thome on 4/20/17.
@@ -53,6 +56,10 @@ public class LocalWebView extends WebView {
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes, boolean privateBrowsing) {
         // Set true for enable JavaScript feature or Set False to Disable JavaScript.
+
+        setFocusable(true);
+        setFocusableInTouchMode(true);
+
         getSettings().setJavaScriptEnabled(true);
         getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         getSettings().setDomStorageEnabled(true);
@@ -74,6 +81,28 @@ public class LocalWebView extends WebView {
 
     public void setWebViewLocalServer(WebViewLocalServer webViewLocalServer) {
         mWebViewLocalServer = webViewLocalServer;
+    }
+
+    @Override
+    public void loadUrl(String url) {
+        if (!TextUtils.isEmpty(url) && url.startsWith("file://")) {
+            if (Build.VERSION.SDK_INT > 15) {
+                getSettings().setAllowFileAccessFromFileURLs(true);
+                getSettings().setAllowUniversalAccessFromFileURLs(true);
+            }
+        }
+        super.loadUrl(url);
+    }
+
+    @Override
+    public void loadUrl(String url, Map<String, String> additionalHttpHeaders) {
+        if (!TextUtils.isEmpty(url) && url.startsWith("file://")) {
+            if (Build.VERSION.SDK_INT > 15) {
+                getSettings().setAllowFileAccessFromFileURLs(true);
+                getSettings().setAllowUniversalAccessFromFileURLs(true);
+            }
+        }
+        super.loadUrl(url, additionalHttpHeaders);
     }
 
     @Override
@@ -194,7 +223,6 @@ public class LocalWebView extends WebView {
         public void onFormResubmission(WebView view, Message dontResend, Message resend) {
             if (mWebViewClient != null) {
                 mWebViewClient.onFormResubmission(view, dontResend, resend);
-
                 return;
             }
             super.onFormResubmission(view, dontResend, resend);
