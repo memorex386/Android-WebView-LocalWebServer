@@ -35,7 +35,7 @@ a secure (`https:`) connection.
     dependencies
     {
     ...
-    compile 'com.mtsdealersolutions:webview_local_server:1.0.12'
+    compile 'com.mtsdealersolutions:webview_local_server:1.0.13'
     ...
     }
 
