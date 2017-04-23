@@ -10,7 +10,7 @@ Create a local web server to run local html files into a webview and view them l
 
 All other websites will load directly from the web.
 
-It is recommended that you store all website data under '__assetsFolder__/www/__webData__', although you can store it under the res folder as well.  You can load the files anywhere in the assets folder still and just change the ```  .setPathInAndroidLocation("myfiles/secondaryfolder")``` to reference the specific folder (or ```  .setPathInAndroidLocation("")``` if you load the files directly into the assets folder.
+It is recommended that you store all website data under '__{ASSETS_FOLDER}__/www/__{HTML_FILE}__', although you can store it under the res folder as well.  You can load the files anywhere in the assets folder still and just change the ```  .setPathInAndroidLocation("myfiles/secondaryfolder")``` to reference the specific folder (or ```  .setPathInAndroidLocation("")``` if you load the files directly into the assets folder.
 
 ### Why?
 The purpose of this library is to enable hosting local content (such as assets
@@ -49,7 +49,7 @@ Quick implementation will get you up and running!
     
     WebViewLocalServer.AssetsBuilder assetsBuilder = new WebViewLocalServer.AssetsBuilder();
     
-    WebViewLocalServer.Server server = webViewLocalServer.createHostFromAssets(assetsBuilder);
+    WebViewLocalServer.Server server = webViewLocalServer.createHost(assetsBuilder);
     
     Uri uri = server.getServerUri(WebViewLocalServer.UrlProtocol.HTTPS, "index.html");
 
@@ -128,7 +128,7 @@ This will create a server that pulls assets from '__assetsFolder__/www' for the 
 #### 2. Now implement it
 
     //Get the server instance
-     WebViewLocalServer.Server server = mWebViewLocalServer.createHostFromAssets(assetsBuilder);
+     WebViewLocalServer.Server server = mWebViewLocalServer.createHost(assetsBuilder);
      
      // Get the uri for the server path, in this example this now is 
      // "https://{RANDOM_UUID}.androidTest.com/testpath/index.html"

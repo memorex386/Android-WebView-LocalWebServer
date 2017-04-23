@@ -288,30 +288,7 @@ public class WebViewLocalServer {
      * @param builder Import the Builder
      * @return prefixes under which the assets are hosted.
      */
-    public Server createHostFromAssets(final AssetsBuilder builder) {
-        return createHost(builder);
-    }
-
-    /**
-     * Hosts the application's assets on an http(s):// URL. Assets from the res folder will be available under
-     * <code>http(s)://{domain}/{virtualAssetPath}/...</code>.
-     *
-     * @param builder Import the Builder
-     * @return prefixes under which the assets are hosted.
-     */
-    public Server createHostFromRes(final ResBuilder builder) {
-        return createHost(builder);
-    }
-
-    /**
-     * Hosts the application's assets on an http(s):// URL. Assets from the local path
-     * <code>assetPath/...</code> will be available under
-     * <code>http(s)://{domain}/{virtualAssetPath}/...</code>.
-     *
-     * @param builder Import the Builder
-     * @return prefixes under which the assets are hosted.
-     */
-    private Server createHost(final ResBuilder builder) {
+    public Server createHost(final Builder builder) {
 
         if (builder == null)
             throw new IllegalArgumentException("assets Builder cannot be null");
