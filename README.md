@@ -201,6 +201,19 @@ LocalWebView also sets these webview settings by default...
     getSettings().setAppCachePath(databasePath);
     getSettings().setAppCacheEnabled(true);
 
+
+    // Deprecated in API 18, but changing from NORMAL to HIGH for older APIs
+    getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+
+    // These should be set by default already, but just in case...
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+         // chromium, enable hardware acceleration
+         setLayerType(View.LAYER_TYPE_HARDWARE, null);
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+         // older android version, disable hardware acceleration
+         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+    }
+        
     
 ####
 

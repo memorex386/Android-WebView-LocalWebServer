@@ -2,7 +2,6 @@ package com.mtsdealersolutions.webview_local_server;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
@@ -10,6 +9,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.ClientCertRequest;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
@@ -20,7 +20,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.io.File;
 import java.util.Map;
 
 /**
@@ -102,6 +101,18 @@ public class LocalWebView extends WebView {
         getSettings().setAppCacheMaxSize(5 * 1048576);
         getSettings().setAppCachePath(databasePath);
         getSettings().setAppCacheEnabled(true);
+
+        //Deprecated in API 18, but changing from NORMAL to HIGH for older APIs
+        getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+
+        //These should be set by default already, but just in case...
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // chromium, enable hardware acceleration
+            setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            // older android version, disable hardware acceleration
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
 
         super.setWebViewClient(new CustomWebViewClient());
 
