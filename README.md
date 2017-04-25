@@ -156,14 +156,51 @@ LocalWebView automatically implements the WebViewLocalServer, so use ```mLocalWe
 
 LocalWebView also sets these webview settings by default...
 
-    getSettings().setJavaScriptEnabled(true);
-    getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-    getSettings().setDomStorageEnabled(true);
-    getSettings().setAppCacheEnabled(true);
+    // Without setting these the webview is not touchable
+    setFocusable(true);
+    setFocusableInTouchMode(true);
+    
+    // Make WebView sizing feel more like an app
+    setInitialScale(0);
+    setVerticalScrollBarEnabled(false);
     getSettings().setUseWideViewPort(true);
     getSettings().setLoadWithOverviewMode(true);
-    getSettings().setBuiltInZoomControls(false);
     getSettings().setSupportZoom(false);
+    
+    // Set true for enable JavaScript feature or Set False to Disable JavaScript.
+    getSettings().setJavaScriptEnabled(true);
+    getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+    getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+    // Jellybean rightfully tried to lock this down. Too bad they didn't give us a whitelist
+    // while we do this
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+         getSettings().setAllowUniversalAccessFromFileURLs(true);
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        getSettings().setMediaPlaybackRequiresUserGesture(false);
+    }
+    
+    // Enable database
+    // We keep this disabled because we use or shim to get around DOM_EXCEPTION_ERROR_16
+    String databasePath = getContext().getApplicationContext().getDir("database", Context.MODE_PRIVATE).getPath();
+    getSettings().setDatabaseEnabled(true);
+        
+    // Deprecated but still used API 23 and below
+    getSettings().setDatabasePath(databasePath);
+    getSettings().setGeolocationDatabasePath(databasePath);
+
+    // Enable DOM storage
+    getSettings().setDomStorageEnabled(true);
+
+    // Enable built-in geolocation
+    getSettings().setGeolocationEnabled(true);
+
+    // Enable AppCache
+    getSettings().setAppCacheMaxSize(5 * 1048576);
+    getSettings().setAppCachePath(databasePath);
+    getSettings().setAppCacheEnabled(true);
+
     
 ####
 
