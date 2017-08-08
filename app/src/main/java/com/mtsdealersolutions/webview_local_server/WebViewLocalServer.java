@@ -29,6 +29,7 @@ import com.mtsdealersolutions.webview_local_server.chromium.AndroidProtocolHandl
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -299,7 +300,14 @@ public class WebViewLocalServer {
 
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme(UrlProtocol.HTTPS.getProtocol());
-        uriBuilder.authority(domain);
+        String encodedAuthority = domain;
+        try{
+           encodedAuthority = URLEncoder.encode(domain, "UTF-8");
+        }catch (Exception e){
+
+        }
+        if (builder.mPort > -1) encodedAuthority += ":" + String.valueOf(builder.mPort);
+        uriBuilder.encodedAuthority(encodedAuthority);
         uriBuilder.path(builder.getUrlVirtualPath());
 
         if (builder instanceof AssetsBuilder && ((AssetsBuilder) builder).getPathInAndroidLocation().indexOf('*') != -1) {
@@ -636,6 +644,7 @@ public class WebViewLocalServer {
         private String mSubDomain;
         private String mUrlVirtualPath = "";
         private Map<UrlProtocol, Boolean> mIsAllowed;
+        private int mPort = -1;
 
         /**
          * Hosts the application's assets on an http(s):// URL. Assets from the local path
@@ -688,6 +697,25 @@ public class WebViewLocalServer {
             }
             mUrlVirtualPath = urlVirtualPath;
             return this;
+        }
+
+        /**
+         * Which port the host should connect to, default is to use the HTTP default port
+         * <code>http(s)://{domain}<b>:{port}</b>/...</code>.
+         *
+         * @param port the port that the host will link to, -1 means the HTTP default port (default is -1)
+         * @return prefixes under which the assets are hosted.
+         */
+        public Builder setPort(int port) {
+            mPort = port;
+            return this;
+        }
+
+        /**
+         * @return the port that the host will link to, -1 means the HTTP default port (default is -1)
+         */
+        public int getPort() {
+            return mPort;
         }
 
         public String getDomain() {

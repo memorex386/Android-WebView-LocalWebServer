@@ -6,7 +6,7 @@
 
 Create a local web server to run local html files into a webview and view them like a website.
 
- You create a virtual web server that runs on your android device, and when you navigate to the server url in the webview it will load it from local assets.  Run HTTP, HTTPS, and FILE protocols on your Android device to be viewed in a WebView. 
+ You create a virtual web server that runs on your android device, and when you navigate to the server url in the webview it will load it from local assets.  Run HTTP, HTTPS, and FILE protocols on your Android device to be viewed in a WebView.
 
 All other websites will load directly from the web.
 
@@ -14,9 +14,9 @@ It is recommended that you store all website data under '__{ASSETS_FOLDER}__/www
 
 ### Why?
 The purpose of this library is to enable hosting local content (such as assets
-or resources) under an http(s):// URL.  
+or resources) under an http(s):// URL.
 The traditional way to access local resources is to use `file:///android_asset`
-or `file://android_res/` URLs but using the `file:` scheme poses problems with 
+or `file://android_res/` URLs but using the `file:` scheme poses problems with
 [the Same-Origin policy](http://en.wikipedia.org/wiki/Same-origin_policy) and
 makes it problematic to reference local content from content loaded over
 a secure (`https:`) connection.
@@ -42,19 +42,19 @@ a secure (`https:`) connection.
 ## Quick Implementation
 
 Quick implementation will get you up and running!
-        
+
     LocalWebView localWebView = (LocalWebView)findViewById(R.id.local_web_view);
-    
+
     WebViewLocalServer webViewLocalServer = localWebView.getWebViewLocalServer();
-    
+
     WebViewLocalServer.AssetsBuilder assetsBuilder = new WebViewLocalServer.AssetsBuilder();
-    
+
     WebViewLocalServer.Server server = webViewLocalServer.createHost(assetsBuilder);
-    
+
     Uri uri = server.getServerUri(WebViewLocalServer.UrlProtocol.HTTPS, "index.html");
 
-    localWebView.loadUrl(uri.toString());  
-        
+    localWebView.loadUrl(uri.toString());
+
 ####
 
 This will get '__{ASSETS_FOLDER}__/www/index.html' and host it it as 'https://{RANDOM_UUID}.androidPlatform.net/index.html'.
@@ -63,22 +63,22 @@ This will get '__{ASSETS_FOLDER}__/www/index.html' and host it it as 'https://{R
 
 #### Optional WebView...
 
-	<com.mtsdealersolutions.webview_local_server.LocalWebView
+	<com.mtsdealersolutions.webview_local_server.ui.LocalWebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/local_web_view"/>
 
 ####
-        
+
     mLocalWebView = (LocalWebView)findViewById(R.id.local_web_view);
     mWebViewLocalServer = mLocalWebView.getWebViewLocalServer();
-    
+
 #### ...Or Just Implement WebViewLocalServer
 
     mWebViewLocalServer = new WebViewLocalServer(context);
-    
+
 ####
-    
+
     class MyWebViewClient extends WebViewClient {
             // For KitKat and earlier.
             @Override
@@ -91,46 +91,46 @@ This will get '__{ASSETS_FOLDER}__/www/index.html' and host it it as 'https://{R
                 return mWebViewLocalServer.shouldInterceptRequest(request);
             }
         }
-        
+
 ####
 
      mLocalWebView.setWebViewClient(new MyWebViewClient);
-     
+
 ## Usage
 
 #### 1. Tell the server where to host the resources.
-        
+
         //User AssetsBuilder for assets or ResBuilder for res
      WebViewLocalServer.AssetsBuilder assetsBuilder = new WebViewLocalServer.AssetsBuilder()
-               
+
                 // The default domain is androidplatform.net, which is an unused domain
                 .setDomain("androidTest.com")
-                
+
                 // www is the default path, ie 'ASSETS_FOLDER/www'"
                 .setPathInAndroidLocation("www")
-                
+
                 // generate a random subdomain, this is the default.  You can also clear the subdomain by setSubDomain("") or clearSubDomain()"
                 // NOTE : Remember that a random subdomain means that cookies and history will be lost on activity/app restart
                 .setRandomSubDomain()
-                
+
                 // HTTP, HTTPS, and FILE are enabled by default
                 .setProtocol(WebViewLocalServer.UrlProtocol.HTTP, false)
-                
-                
+
+
                 // no Url virtual path is set by default
-                // 
+                //
                 // NOTE : Remember, if you define a virtual path AND your website uses <base href>,
                 // then you need to adjust <base href> to match whatever is here (example <base href="/testpath/">
                 .setUrlVirtualPath("testpath");
-                
+
 This will create a server that pulls assets from '__assetsFolder__/www' for the server "https://{RANDOM_UUID}.androidTest.com/testpath"
 
 #### 2. Now implement it
 
     //Get the server instance
      WebViewLocalServer.Server server = mWebViewLocalServer.createHost(assetsBuilder);
-     
-     // Get the uri for the server path, in this example this now is 
+
+     // Get the uri for the server path, in this example this now is
      // "https://{RANDOM_UUID}.androidTest.com/testpath/index.html"
      Uri uri = server.getServerUri(WebViewLocalServer.UrlProtocol.HTTPS, "index.html");
 
@@ -140,7 +140,7 @@ This will create a server that pulls assets from '__assetsFolder__/www' for the 
 
 #### 3. Consider using the following settings in order to maximize security:
 
-        // Set these to false for HTTP and HTTPS is recommended, but true 
+        // Set these to false for HTTP and HTTPS is recommended, but true
         // is required for FILE protocol
         mLocalWebView.getSettings().setAllowFileAccessFromFileURLs(false);
         mLocalWebView.getSettings().setAllowUniversalAccessFromFileURLs(false);
@@ -149,7 +149,7 @@ This will create a server that pulls assets from '__assetsFolder__/www' for the 
         // if your app is not using file:// or content:// URLs.
         mLocalWebView.getSettings().setAllowFileAccess(false);
         mLocalWebView.getSettings().setAllowContentAccess(false);
-        
+
 ## LocalWebView
 
 LocalWebView automatically implements the WebViewLocalServer, so use ```mLocalWebView.getWebViewLocalServer();``` method to retrieve it.
@@ -159,14 +159,14 @@ LocalWebView also sets these webview settings by default...
     // Without setting these the webview is not touchable
     setFocusable(true);
     setFocusableInTouchMode(true);
-    
+
     // Make WebView sizing feel more like an app
     setInitialScale(0);
     setVerticalScrollBarEnabled(false);
     getSettings().setUseWideViewPort(true);
     getSettings().setLoadWithOverviewMode(true);
     getSettings().setSupportZoom(false);
-    
+
     // Set true for enable JavaScript feature or Set False to Disable JavaScript.
     getSettings().setJavaScriptEnabled(true);
     getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
@@ -180,12 +180,12 @@ LocalWebView also sets these webview settings by default...
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
         getSettings().setMediaPlaybackRequiresUserGesture(false);
     }
-    
+
     // Enable database
     // We keep this disabled because we use or shim to get around DOM_EXCEPTION_ERROR_16
     String databasePath = getContext().getApplicationContext().getDir("database", Context.MODE_PRIVATE).getPath();
     getSettings().setDatabaseEnabled(true);
-        
+
     // Deprecated but still used API 23 and below
     getSettings().setDatabasePath(databasePath);
     getSettings().setGeolocationDatabasePath(databasePath);
@@ -213,8 +213,8 @@ LocalWebView also sets these webview settings by default...
          // older android version, disable hardware acceleration
          setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
-        
-    
+
+
 ####
 
 ... and if you load the FILE protocol url then these are forced to true...
@@ -222,7 +222,7 @@ LocalWebView also sets these webview settings by default...
     getSettings().setAllowFileAccessFromFileURLs(true);
     getSettings().setAllowUniversalAccessFromFileURLs(true);
 
-    
+
 ... you can still modify these settings from ```mLocalwebview.getSettings()```
 
 ## Picking a domain.
@@ -230,7 +230,7 @@ LocalWebView also sets these webview settings by default...
 One potential problem of hosting local resources on a http(s):// URL is that
 doing so may conflict with a real website. This means that local resources
 should only be hosted on domains that the user has control of or which have
-been dedicated for this purpose.  
+been dedicated for this purpose.
 The `androidplatform.net` domain has been specifically reserved for this
 purpose and you are free to use it.
 
@@ -244,5 +244,5 @@ Remember that a random domain means that cookies and history will not be saved f
 Should using a random subdomain be inconvenient for some reason it is possible
 to use a fixed domain (like `androidplatform.net` or a domain you own).
 
-      
-# Based off of [Google's WebView-Local-Server](https://github.com/google/webview-local-server) 
+
+# Based off of [Google's WebView-Local-Server](https://github.com/google/webview-local-server)
