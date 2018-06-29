@@ -6,6 +6,9 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.mtsdealersolutions.webview_local_server.config.ServerWebViewClient;
+import com.mtsdealersolutions.webview_local_server.ui.LocalWebView;
+
 /**
  * Created by bradley.thome on 8/8/17.
  */
@@ -70,6 +73,10 @@ public class ConfigWebViewUtil {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             // older android version, disable hardware acceleration
             webView. setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
+
+        if (webView instanceof LocalWebView){
+            webView.setWebViewClient(new ServerWebViewClient(((LocalWebView) webView).getWebViewLocalServer()));
         }
 
     }
