@@ -63,9 +63,9 @@ public class LocalWebView extends WebView {
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes, boolean privateBrowsing) {
 
-       ConfigWebViewUtil.setDefaultAppSettings(this);
-
         mWebViewLocalServer = new WebViewLocalServer(getContext());
+
+        ConfigWebViewUtil.setDefaultAppSettings(this);
 
     }
 
