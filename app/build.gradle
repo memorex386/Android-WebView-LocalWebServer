@@ -3,14 +3,14 @@ apply plugin: 'com.novoda.bintray-release' // must be applied after your artifac
 
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 29
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -19,12 +19,20 @@ android {
     }
 }
 
+repositories {
+    google()
+}
+
+dependencies{
+    implementation "androidx.webkit:webkit:1.0.0"
+}
+
 publish {
     repoName = "Android_WebView_LocalWebServer"
     userOrg = 'memorex386'
     groupId = 'com.mtsdealersolutions'
     artifactId = 'webview_local_server'
-    publishVersion = '1.0.20'
+    publishVersion = '1.0.21'
     desc = 'Run the HTTP, HTTPS, and FILE protocols on your Android device to be viewed in a WebView'
     website = 'https://github.com/memorex386/Android-WebView-LocalWebServer'
 }

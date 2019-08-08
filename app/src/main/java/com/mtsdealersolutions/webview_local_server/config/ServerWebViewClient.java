@@ -5,13 +5,15 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.webkit.WebViewClientCompat;
+
 import com.mtsdealersolutions.webview_local_server.WebViewLocalServer;
 
 /**
  * Created by bradley.thome on 8/8/17.
  */
 
-public class ServerWebViewClient extends WebViewClient {
+public class ServerWebViewClient extends WebViewClientCompat {
 
     private WebViewLocalServer mWebViewLocalServer;
 

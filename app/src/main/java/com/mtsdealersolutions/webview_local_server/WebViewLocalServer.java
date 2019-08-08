@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 
@@ -210,6 +211,32 @@ public class WebViewLocalServer {
         return uri;
     }
 
+    //get mime type by url
+    public String getMimeType(String url) {
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            if (extension.equals("js")) {
+                return "text/javascript";
+            } else if (extension.equals("woff")) {
+                return "application/font-woff";
+            } else if (extension.equals("woff2")) {
+                return "application/font-woff2";
+            } else if (extension.equals("ttf")) {
+                return "application/x-font-ttf";
+            } else if (extension.equals("eot")) {
+                return "application/vnd.ms-fontobject";
+            } else if (extension.equals("svg")) {
+                return "image/svg+xml";
+            }
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        return type;
+    }
+
+
+
+
     /**
      * Attempt to retrieve the WebResourceResponse associated with the given <code>request</code>.
      * This method should be invoked from within
@@ -229,7 +256,7 @@ public class WebViewLocalServer {
             return null;
         }
 
-        return new WebResourceResponse(handler.getMimeType(), handler.getEncoding(),
+        return new WebResourceResponse(handler.getMimeType() == null ? getMimeType(request.getUrl().toString()) : handler.getMimeType(), handler.getEncoding() == null ? "UTF-8" : handler.getEncoding(),
                 handler.getStatusCode(), handler.getReasonPhrase(), handler.getResponseHeaders(),
                 new LollipopLazyInputStream(handler, request));
     }
@@ -254,11 +281,11 @@ public class WebViewLocalServer {
             return null;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return new WebResourceResponse(handler.getMimeType(), handler.getEncoding(),
+            return new WebResourceResponse(handler.getMimeType() == null ? getMimeType(url) : handler.getMimeType(), handler.getEncoding() == null ? "UTF-8" : handler.getEncoding(),
                     new LegacyLazyInputStream(handler, uri));
         } else {
             InputStream is = handler.handle(uri);
-            return new WebResourceResponse(handler.getMimeType(), handler.getEncoding(),
+            return new WebResourceResponse(handler.getMimeType() == null ? getMimeType(url) : handler.getMimeType(), handler.getEncoding() == null ? "UTF-8" : handler.getEncoding(),
                     is);
         }
     }
