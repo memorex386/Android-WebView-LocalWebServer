@@ -257,7 +257,7 @@ public class WebViewLocalServer {
         }
 
         return new WebResourceResponse(handler.getMimeType() == null ? getMimeType(request.getUrl().toString()) : handler.getMimeType(), handler.getEncoding() == null ? "UTF-8" : handler.getEncoding(),
-                handler.getStatusCode(), handler.getReasonPhrase(), handler.getResponseHeaders(),
+                handler.getStatusCode() <= 0 ? 200 : handler.getStatusCode(), handler.getReasonPhrase() == null ? "" : handler.getReasonPhrase(), handler.getResponseHeaders() == null ? new HashMap<String, String>() : handler.getResponseHeaders(),
                 new LollipopLazyInputStream(handler, request));
     }
 

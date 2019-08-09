@@ -27,12 +27,13 @@ dependencies{
     implementation "androidx.webkit:webkit:1.0.0"
 }
 
+
 publish {
     repoName = "Android_WebView_LocalWebServer"
     userOrg = 'memorex386'
     groupId = 'com.mtsdealersolutions'
     artifactId = 'webview_local_server'
-    publishVersion = '1.0.21'
+    publishVersion = '1.0.22'
     desc = 'Run the HTTP, HTTPS, and FILE protocols on your Android device to be viewed in a WebView'
     website = 'https://github.com/memorex386/Android-WebView-LocalWebServer'
 }
