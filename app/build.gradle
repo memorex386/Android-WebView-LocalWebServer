@@ -33,7 +33,7 @@ publish {
     userOrg = 'memorex386'
     groupId = 'com.mtsdealersolutions'
     artifactId = 'webview_local_server'
-    publishVersion = '1.0.22'
+    publishVersion = '1.0.23'
     desc = 'Run the HTTP, HTTPS, and FILE protocols on your Android device to be viewed in a WebView'
     website = 'https://github.com/memorex386/Android-WebView-LocalWebServer'
 }
